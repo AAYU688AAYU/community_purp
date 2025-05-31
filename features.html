@@ -1,0 +1,857 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CommunityConnect - Features</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #0a0a0a;
+            color: #e0e0e0;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Navigation */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: rgba(15, 15, 15, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid #333;
+            z-index: 1000;
+            padding: 15px 0;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: #fff;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo-icon {
+            width: 35px;
+            height: 35px;
+            background: linear-gradient(135deg, #666, #333);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 18px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 30px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: #ccc;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            padding: 8px 16px;
+            border-radius: 6px;
+            position: relative;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            color: #fff;
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 2px;
+            background: #666;
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover::after,
+        .nav-links a.active::after {
+            width: 80%;
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-top: 80px;
+        }
+
+        /* Feature Frames */
+        .feature-frame {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 80px 20px;
+            background-attachment: fixed;
+            position: relative;
+            border-bottom: 1px solid #222;
+        }
+
+        .feature-frame:nth-child(odd) {
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);
+        }
+
+        .feature-frame:nth-child(even) {
+            background: linear-gradient(135deg, #111 0%, #000 100%);
+        }
+
+        .feature-content {
+            max-width: 1200px;
+            width: 100%;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+        }
+
+        .feature-text {
+            z-index: 2;
+        }
+
+        .feature-visual {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .feature-title {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 30px;
+            background: linear-gradient(135deg, #fff, #aaa);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: slideInLeft 1s ease-out;
+        }
+
+        .feature-subtitle {
+            font-size: 1.2rem;
+            color: #999;
+            margin-bottom: 25px;
+            animation: slideInLeft 1s ease-out 0.2s both;
+        }
+
+        .feature-description {
+            font-size: 1.1rem;
+            color: #ccc;
+            margin-bottom: 40px;
+            line-height: 1.8;
+            animation: slideInLeft 1s ease-out 0.4s both;
+        }
+
+        .feature-list {
+            list-style: none;
+            margin-bottom: 40px;
+        }
+
+        .feature-list li {
+            padding: 12px 0;
+            color: #bbb;
+            font-size: 1rem;
+            position: relative;
+            padding-left: 30px;
+            animation: slideInLeft 1s ease-out 0.6s both;
+        }
+
+        .feature-list li::before {
+            content: '▶';
+            position: absolute;
+            left: 0;
+            color: #666;
+            font-size: 12px;
+        }
+
+        .feature-btn {
+            background: linear-gradient(135deg, #333, #555);
+            color: #fff;
+            padding: 15px 35px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            animation: slideInLeft 1s ease-out 0.8s both;
+            border: 1px solid #444;
+        }
+
+        .feature-btn:hover {
+            background: linear-gradient(135deg, #444, #666);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            border-color: #666;
+        }
+
+        /* Visual Elements */
+        .visual-card {
+            width: 400px;
+            height: 300px;
+            background: linear-gradient(135deg, #1a1a1a, #2a2a2a);
+            border-radius: 20px;
+            padding: 40px;
+            border: 1px solid #333;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+            position: relative;
+            overflow: hidden;
+            animation: slideInRight 1s ease-out;
+        }
+
+        .visual-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #666, #333, #666);
+        }
+
+        .card-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #333, #555);
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 35px;
+            color: #fff;
+            margin-bottom: 25px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .card-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #fff;
+            margin-bottom: 15px;
+        }
+
+        .card-description {
+            color: #aaa;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        /* QR Code Styles */
+        .qr-container {
+            width: 250px;
+            height: 250px;
+            background: #fff;
+            border-radius: 15px;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            animation: slideInRight 1s ease-out;
+        }
+
+        .qr-pattern {
+            width: 100%;
+            height: 100%;
+            background-image: 
+                repeating-linear-gradient(0deg, #000, #000 3px, transparent 3px, transparent 6px),
+                repeating-linear-gradient(90deg, #000, #000 3px, transparent 3px, transparent 6px);
+            border-radius: 10px;
+            position: relative;
+        }
+
+        .qr-center {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 60px;
+            height: 60px;
+            background: #000;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-weight: bold;
+            font-size: 12px;
+        }
+
+        /* Issue Report Visual */
+        .issue-dashboard {
+            width: 350px;
+            height: 280px;
+            background: linear-gradient(135deg, #1a1a1a, #2a2a2a);
+            border-radius: 15px;
+            padding: 25px;
+            border: 1px solid #333;
+            animation: slideInRight 1s ease-out;
+        }
+
+        .dashboard-header {
+            display: flex;
+            justify-content: between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #333;
+        }
+
+        .status-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+
+        .status-red { background: #ff4444; }
+        .status-orange { background: #ff8800; }
+        .status-green { background: #44ff44; }
+
+        .issue-item {
+            display: flex;
+            align-items: center;
+            padding: 10px 0;
+            font-size: 14px;
+            color: #ccc;
+            border-bottom: 1px solid #222;
+        }
+
+        /* Meeting Visual */
+        .meeting-screen {
+            width: 380px;
+            height: 250px;
+            background: #000;
+            border-radius: 15px;
+            border: 3px solid #333;
+            position: relative;
+            overflow: hidden;
+            animation: slideInRight 1s ease-out;
+        }
+
+        .video-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            height: 100%;
+            gap: 2px;
+        }
+
+        .video-participant {
+            background: linear-gradient(135deg, #222, #333);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-size: 40px;
+            position: relative;
+        }
+
+        .video-participant::after {
+            content: attr(data-name);
+            position: absolute;
+            bottom: 10px;
+            left: 10px;
+            font-size: 12px;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 4px 8px;
+            border-radius: 4px;
+        }
+
+        .meeting-controls {
+            position: absolute;
+            bottom: 15px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 10px;
+        }
+
+        .control-btn {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            background: rgba(0, 0, 0, 0.8);
+            border: none;
+            color: #fff;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        /* Reverse Layout */
+        .reverse .feature-content {
+            grid-template-columns: 1fr 1fr;
+        }
+
+        .reverse .feature-text {
+            order: 2;
+        }
+
+        .reverse .feature-visual {
+            order: 1;
+        }
+
+        /* Animations */
+        @keyframes slideInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .floating {
+            animation: float 3s ease-in-out infinite;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .feature-content {
+                grid-template-columns: 1fr;
+                gap: 40px;
+                text-align: center;
+            }
+
+            .reverse .feature-text,
+            .reverse .feature-visual {
+                order: unset;
+            }
+
+            .feature-title {
+                font-size: 2rem;
+            }
+
+            .visual-card,
+            .qr-container,
+            .issue-dashboard,
+            .meeting-screen {
+                width: 100%;
+                max-width: 350px;
+            }
+        }
+
+        /* Scroll Indicator */
+        .scroll-indicator {
+            position: fixed;
+            right: 30px;
+            top: 50%;
+            transform: translateY(-50%);
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            z-index: 999;
+        }
+
+        .scroll-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #333;
+            border: 2px solid #555;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .scroll-dot.active {
+            background: #666;
+            border-color: #999;
+            transform: scale(1.2);
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="logo">
+                <div class="logo-icon">🏢</div>
+                CommunityConnect
+            </a>
+            <ul class="nav-links">
+                <li><a href="#qr-feature" class="nav-link">QR Navigation</a></li>
+                <li><a href="#issue-feature" class="nav-link">Issue Reporting</a></li>
+                <li><a href="#meeting-feature" class="nav-link">Virtual Meetings</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Scroll Indicator -->
+    <div class="scroll-indicator">
+        <div class="scroll-dot active" data-target="#qr-feature"></div>
+        <div class="scroll-dot" data-target="#issue-feature"></div>
+        <div class="scroll-dot" data-target="#meeting-feature"></div>
+    </div>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- QR Navigation Feature -->
+        <section id="qr-feature" class="feature-frame">
+            <div class="feature-content">
+                <div class="feature-text">
+                    <h2 class="feature-title">Smart QR Navigation</h2>
+                    <p class="feature-subtitle">Guide visitors effortlessly to your doorstep</p>
+                    <p class="feature-description">
+                        Transform the way visitors find your home with our intelligent QR navigation system. 
+                        Generate personalized QR codes that provide step-by-step directions from the main gate 
+                        to your exact flat location, eliminating confusion and reducing delivery delays.
+                    </p>
+                    <ul class="feature-list">
+                        <li>Generate instant QR codes for your flat</li>
+                        <li>Include custom instructions and landmarks</li>
+                        <li>Perfect for deliveries and guest visits</li>
+                        <li>Download and share easily via WhatsApp</li>
+                        <li>Works offline once scanned</li>
+                    </ul>
+                    <a href="#" class="feature-btn" onclick="generateQRDemo()">Generate QR Code</a>
+                </div>
+                <div class="feature-visual">
+                    <div class="qr-container floating">
+                        <div class="qr-pattern">
+                            <div class="qr-center">QR</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Issue Reporting Feature -->
+        <section id="issue-feature" class="feature-frame reverse">
+            <div class="feature-content">
+                <div class="feature-text">
+                    <h2 class="feature-title">Issue Reporting System</h2>
+                    <p class="feature-subtitle">Report, track, and resolve society issues efficiently</p>
+                    <p class="feature-description">
+                        Never let society issues go unnoticed again. Our comprehensive reporting system 
+                        allows residents to quickly report problems, track resolution progress, and stay 
+                        informed about community maintenance activities in real-time.
+                    </p>
+                    <ul class="feature-list">
+                        <li>Report issues with priority levels</li>
+                        <li>Photo documentation support</li>
+                        <li>Real-time status tracking</li>
+                        <li>SMS and email notifications</li>
+                        <li>Management dashboard integration</li>
+                    </ul>
+                    <a href="#" class="feature-btn" onclick="reportIssueDemo()">Report an Issue</a>
+                </div>
+                <div class="feature-visual">
+                    <div class="issue-dashboard floating">
+                        <div class="dashboard-header">
+                            <h3 style="color: #fff; font-size: 16px;">Issue Dashboard</h3>
+                        </div>
+                        <div class="issue-item">
+                            <div class="status-dot status-red"></div>
+                            <span>Elevator B2 not working</span>
+                        </div>
+                        <div class="issue-item">
+                            <div class="status-dot status-orange"></div>
+                            <span>Water pressure low - Block A</span>
+                        </div>
+                        <div class="issue-item">
+                            <div class="status-dot status-green"></div>
+                            <span>Parking light fixed</span>
+                        </div>
+                        <div class="issue-item">
+                            <div class="status-dot status-orange"></div>
+                            <span>Garden maintenance pending</span>
+                        </div>
+                        <div class="issue-item">
+                            <div class="status-dot status-red"></div>
+                            <span>Security camera offline</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Virtual Meetings Feature -->
+        <section id="meeting-feature" class="feature-frame">
+            <div class="feature-content">
+                <div class="feature-text">
+                    <h2 class="feature-title">Virtual Meetings</h2>
+                    <p class="feature-subtitle">Attend society meetings from anywhere, anytime</p>
+                    <p class="feature-description">
+                        Revolutionize society meetings with our integrated virtual meeting platform. 
+                        Attend important discussions from the comfort of your home, access recorded 
+                        sessions, and stay engaged with your community like never before.
+                    </p>
+                    <ul class="feature-list">
+                        <li>HD video conferencing integration</li>
+                        <li>Screen sharing and presentations</li>
+                        <li>Meeting recordings and playback</li>
+                        <li>Digital voting and polls</li>
+                        <li>Automatic meeting reminders</li>
+                    </ul>
+                    <a href="#" class="feature-btn" onclick="joinMeetingDemo()">Join Meeting</a>
+                </div>
+                <div class="feature-visual">
+                    <div class="meeting-screen floating">
+                        <div class="video-grid">
+                            <div class="video-participant" data-name="Secretary">👨‍💼</div>
+                            <div class="video-participant" data-name="Treasurer">👩‍💼</div>
+                            <div class="video-participant" data-name="Member 1">👨</div>
+                            <div class="video-participant" data-name="Member 2">👩</div>
+                        </div>
+                        <div class="meeting-controls">
+                            <button class="control-btn">🎤</button>
+                            <button class="control-btn">📹</button>
+                            <button class="control-btn">📱</button>
+                            <button class="control-btn">📞</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        const API_URL = 'http://localhost:5000/api';
+
+        // Smooth scrolling for navigation
+        document.querySelectorAll('.nav-link, .scroll-dot').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href') || this.getAttribute('data-target'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Update active navigation and scroll indicator
+        function updateActiveElements() {
+            const sections = document.querySelectorAll('.feature-frame');
+            const navLinks = document.querySelectorAll('.nav-link');
+            const scrollDots = document.querySelectorAll('.scroll-dot');
+            
+            let currentSection = '';
+            sections.forEach(section => {
+                const rect = section.getBoundingClientRect();
+                if (rect.top <= 100 && rect.bottom >= 100) {
+                    currentSection = section.id;
+                }
+            });
+
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === `#${currentSection}`) {
+                    link.classList.add('active');
+                }
+            });
+
+            scrollDots.forEach(dot => {
+                dot.classList.remove('active');
+                if (dot.getAttribute('data-target') === `#${currentSection}`) {
+                    dot.classList.add('active');
+                }
+            });
+        }
+
+        // Listen for scroll events
+        window.addEventListener('scroll', updateActiveElements);
+        window.addEventListener('load', updateActiveElements);
+
+        // Demo Functions with API Integration
+        async function generateQRDemo() {
+            try {
+                const flatDetails = {
+                    block: 'A',
+                    flatNumber: '101',
+                    directions: 'Take the first right after entrance, Building A is the second building on the left'
+                };
+
+                const response = await fetch(`${API_URL}/qr/generate`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ flatDetails: JSON.stringify(flatDetails) })
+                });
+
+                const data = await response.json();
+                
+                // Create and show QR code image
+                const qrImage = new Image();
+                qrImage.src = `data:image/png;base64,${data.qr_code}`;
+                
+                const container = document.querySelector('.qr-pattern');
+                container.innerHTML = '';
+                container.appendChild(qrImage);
+                
+                alert('🎉 QR Code Generated!\n\n✅ Your personalized QR code is ready\n📱 Visitors can scan to get directions\n📥 Download or share via WhatsApp\n🏠 Includes your flat details and custom instructions');
+            } catch (error) {
+                console.error('Error generating QR code:', error);
+                alert('Failed to generate QR code. Please try again.');
+            }
+        }
+
+        async function reportIssueDemo() {
+            try {
+                const issue = {
+                    title: 'Elevator B2 not working',
+                    description: 'The elevator in Block B2 is not functioning since morning',
+                    priority: 'high',
+                    location: 'Block B2',
+                    reportedBy: 'Flat A101'
+                };
+
+                const response = await fetch(`${API_URL}/issues`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(issue)
+                });
+
+                const data = await response.json();
+                alert('📝 Issue Reporting\n\n✅ Issue submitted successfully\n📧 Confirmation sent to your email\n📱 SMS updates for status changes\n⏱️ Expected response: 24-48 hours\n📊 Track progress in your dashboard');
+                
+                // Update the dashboard
+                await updateIssueDashboard();
+            } catch (error) {
+                console.error('Error reporting issue:', error);
+                alert('Failed to report issue. Please try again.');
+            }
+        }
+
+        async function updateIssueDashboard() {
+            try {
+                const response = await fetch(`${API_URL}/issues`);
+                const issues = await response.json();
+                
+                const dashboard = document.querySelector('.issue-dashboard');
+                const issuesHtml = issues.map(issue => `
+                    <div class="issue-item">
+                        <div class="status-dot status-${getStatusColor(issue.status)}"></div>
+                        <span>${issue.title}</span>
+                    </div>
+                `).join('');
+                
+                dashboard.innerHTML = `
+                    <div class="dashboard-header">
+                        <h3 style="color: #fff; font-size: 16px;">Issue Dashboard</h3>
+                    </div>
+                    ${issuesHtml}
+                `;
+            } catch (error) {
+                console.error('Error updating dashboard:', error);
+            }
+        }
+
+        function getStatusColor(status) {
+            switch (status) {
+                case 'pending': return 'red';
+                case 'in_progress': return 'orange';
+                case 'resolved': return 'green';
+                default: return 'orange';
+            }
+        }
+
+        async function joinMeetingDemo() {
+            try {
+                const meeting = {
+                    title: 'Monthly Society Meeting',
+                    date: new Date().toISOString(),
+                    organizer: 'Secretary',
+                    participants: ['Secretary', 'Treasurer', 'Member 1', 'Member 2']
+                };
+
+                const response = await fetch(`${API_URL}/meetings`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(meeting)
+                });
+
+                const data = await response.json();
+                alert('🎥 Virtual Meeting\n\n✅ Joining society meeting...\n🔊 Audio and video ready\n📋 Agenda shared with participants\n🗳️ Digital voting available\n📹 Session will be recorded');
+            } catch (error) {
+                console.error('Error creating meeting:', error);
+                alert('Failed to join meeting. Please try again.');
+            }
+        }
+
+        // Intersection Observer for animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        // Observe all feature frames
+        document.querySelectorAll('.feature-frame').forEach(frame => {
+            observer.observe(frame);
+        });
+
+        // Initial load of issues
+        window.addEventListener('load', updateIssueDashboard);
+    </script>
+</body>
+</html> 
