@@ -1,4 +1,4 @@
-#!/home/gulshan-kumar/code/backend/venv/bin/python3
+#!/home/gulshan-kumar/code/community_purp/backend/venv/bin/python3
 # -*- coding: utf-8 -*-
 import re
 import sys

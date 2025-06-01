@@ -1,0 +1,1208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OceanConnect - Community Portal</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background-image: url('https://images.unsplash.com/photo-1559827260-dc66d52bef19?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1974&q=80');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            background-repeat: no-repeat;
+            color: white;
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Ocean overlay for better text visibility */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(10, 20, 40, 0.8) 0%, rgba(30, 60, 114, 0.7) 50%, rgba(42, 82, 152, 0.6) 100%);
+            z-index: -1;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Navigation */
+        .nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+            background: rgba(255,255,255,0.05);
+            border-radius: 15px;
+            margin-bottom: 20px;
+            padding: 20px 30px;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            letter-spacing: 2px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 30px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            transition: color 0.3s;
+            cursor: pointer;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+        }
+
+        .nav-links a:hover {
+            color: #64b5f6;
+        }
+
+        .user-actions {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .login-btn, .signup-btn {
+            padding: 10px 20px;
+            border-radius: 20px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s;
+            cursor: pointer;
+            border: none;
+        }
+
+        .login-btn {
+            background: rgba(255,255,255,0.2);
+            color: white;
+            border: 1px solid rgba(255,255,255,0.3);
+            backdrop-filter: blur(10px);
+        }
+
+        .signup-btn {
+            background: #64b5f6;
+            color: white;
+            backdrop-filter: blur(10px);
+        }
+
+        .login-btn:hover, .signup-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+
+        /* Home Page */
+        .home-page {
+            display: block;
+        }
+
+        .hero {
+            text-align: center;
+            padding: 80px 0;
+            position: relative;
+        }
+
+        .hero h1 {
+            font-size: 4rem;
+            font-weight: 300;
+            letter-spacing: 3px;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            text-shadow: 3px 3px 6px rgba(0,0,0,0.5);
+        }
+
+        .hero .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            margin-bottom: 40px;
+            letter-spacing: 1px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .fish-container {
+            position: relative;
+            height: 400px;
+            margin: 50px 0;
+            background: rgba(0,17,34,0.6);
+            border-radius: 20px;
+            overflow: hidden;
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .fish {
+            position: absolute;
+            right: 50px;
+            bottom: 50px;
+            width: 200px;
+            height: 150px;
+            background: linear-gradient(45deg, #ff6b9d, #c44569);
+            clip-path: polygon(0% 50%, 25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%);
+            animation: swim 3s ease-in-out infinite;
+        }
+
+        @keyframes swim {
+            0%, 100% { transform: translateX(0) rotate(0deg); }
+            50% { transform: translateX(-20px) rotate(2deg); }
+        }
+
+        .community-section {
+            margin-top: 80px;
+        }
+
+        .community-title {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 50px;
+            letter-spacing: 2px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .users-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .user-card {
+            background: rgba(255,255,255,0.1);
+            border-radius: 20px;
+            padding: 30px;
+            text-align: center;
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255,255,255,0.2);
+            transition: transform 0.3s, box-shadow 0.3s;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .user-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+            background: rgba(255,255,255,0.15);
+        }
+
+        .user-photo {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            margin: 0 auto 20px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            color: white;
+            border: 3px solid rgba(255,255,255,0.3);
+        }
+
+        .user-name {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+            font-weight: bold;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+        }
+
+        .user-info {
+            color: #64b5f6;
+            font-size: 1rem;
+            margin-bottom: 15px;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+        }
+
+        .user-details {
+            font-size: 0.9rem;
+            opacity: 0.9;
+            line-height: 1.6;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+        }
+
+        .online-status {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #4caf50;
+            border: 2px solid white;
+        }
+
+        .offline-status {
+            background: #757575;
+        }
+
+        /* Profile Pages */
+        .profile-page {
+            display: none;
+            padding: 40px 0;
+        }
+
+        .profile-header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .profile-photo-large {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            margin: 0 auto 30px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 5rem;
+            color: white;
+            border: 5px solid rgba(255,255,255,0.2);
+        }
+
+        .profile-details {
+            background: rgba(255,255,255,0.1);
+            border-radius: 20px;
+            padding: 40px;
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .info-section {
+            margin-top: 30px;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .info-item {
+            background: rgba(100, 181, 246, 0.2);
+            padding: 15px;
+            border-radius: 10px;
+            backdrop-filter: blur(10px);
+        }
+
+        .info-label {
+            font-size: 0.9rem;
+            opacity: 0.8;
+            margin-bottom: 5px;
+        }
+
+        .info-value {
+            font-size: 1.1rem;
+            font-weight: 500;
+        }
+
+        .back-btn {
+            background: #64b5f6;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 25px;
+            cursor: pointer;
+            margin-bottom: 30px;
+            transition: background 0.3s;
+            backdrop-filter: blur(10px);
+        }
+
+        .back-btn:hover {
+            background: #42a5f5;
+        }
+
+        .contact-actions {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 30px;
+        }
+
+        .contact-btn {
+            background: rgba(255,255,255,0.2);
+            color: white;
+            border: 1px solid rgba(255,255,255,0.3);
+            padding: 12px 24px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            backdrop-filter: blur(10px);
+        }
+
+        .contact-btn:hover {
+            background: rgba(255,255,255,0.3);
+            transform: translateY(-2px);
+        }
+
+        /* Stats Section */
+        .stats-section {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin: 50px 0;
+        }
+
+        .stat-card {
+            background: rgba(255,255,255,0.1);
+            padding: 25px;
+            border-radius: 15px;
+            text-align: center;
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255,255,255,0.2);
+            transition: transform 0.3s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            background: rgba(255,255,255,0.15);
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #64b5f6;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .stat-label {
+            font-size: 1rem;
+            opacity: 0.8;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            
+            .nav-links {
+                display: none;
+            }
+            
+            .users-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .user-actions {
+                gap: 10px;
+            }
+
+            .login-btn, .signup-btn {
+                padding: 8px 16px;
+                font-size: 0.9rem;
+            }
+
+            .nav {
+                padding: 15px 20px;
+            }
+        }
+
+        /* Enhanced text shadows for better readability */
+        h1, h2, h3 {
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+
+        p, li {
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+        }
+
+        .profile-container {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(15px);
+            border-radius: 20px;
+            padding: 30px;
+            margin: 20px auto;
+            max-width: 800px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .profile-header {
+            display: flex;
+            align-items: center;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .profile-picture {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .profile-info {
+            flex: 1;
+        }
+
+        .profile-name {
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+
+        .profile-role {
+            color: #64b5f6;
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+        }
+
+        .profile-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .detail-card {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 20px;
+            border-radius: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .qr-code-container {
+            text-align: center;
+            margin-top: 30px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+        }
+
+        .admin-panel {
+            margin-top: 30px;
+            padding: 20px;
+            background: rgba(255, 0, 0, 0.1);
+            border-radius: 15px;
+            display: none;
+        }
+
+        .admin-panel.visible {
+            display: block;
+        }
+
+        .user-list {
+            margin-top: 20px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .edit-profile-btn {
+            background: #64b5f6;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+
+        .logout-btn {
+            background: rgba(255, 0, 0, 0.2);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            margin-left: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Navigation -->
+        <nav class="nav">
+            <div class="logo">OceanConnect</div>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="#" id="profile-link" style="display: none;">Profile</a></li>
+                <li><a href="#" id="admin-link" style="display: none;">Admin Panel</a></li>
+            </ul>
+            <div class="user-actions">
+                <button class="login-btn" id="loginBtn" onclick="showLoginModal()">Login</button>
+                <button class="signup-btn" id="signupBtn" onclick="showSignupModal()">Sign Up</button>
+                <button class="logout-btn" id="logoutBtn" style="display: none;" onclick="logout()">Logout</button>
+            </div>
+        </nav>
+
+        <!-- Home Page -->
+        <div id="homePage" class="home-page">
+            <section class="hero">
+                <h1>OCEANCONNECT</h1>
+                <div class="subtitle">Connect with your community members</div>
+                
+                <div class="fish-container">
+                    <div class="fish"></div>
+                </div>
+
+                <!-- Community Stats -->
+                <div class="stats-section">
+                    <div class="stat-card">
+                        <div class="stat-number">2,345</div>
+                        <div class="stat-label">Community Members</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">456</div>
+                        <div class="stat-label">Active Today</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">89</div>
+                        <div class="stat-label">New This Week</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">12</div>
+                        <div class="stat-label">Building Blocks</div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="community-section">
+                <h2 class="community-title">FEATURED MEMBERS</h2>
+                <div class="users-grid">
+                    <div class="user-card" onclick="showProfile('user1')">
+                        <div class="online-status"></div>
+                        <div class="user-photo">👨‍💼</div>
+                        <div class="user-name">Rajesh Kumar</div>
+                        <div class="user-info">Flat A-304 • Block A</div>
+                        <div class="user-details">Society President • Active community member who organizes events and helps new residents settle in. Available for community discussions.</div>
+                    </div>
+
+                    <div class="user-card" onclick="showProfile('user2')">
+                        <div class="online-status"></div>
+                        <div class="user-photo">👩‍⚕️</div>
+                        <div class="user-name">Dr. Priya Sharma</div>
+                        <div class="user-info">Flat B-508 • Block B</div>
+                        <div class="user-details">Pediatrician • Provides medical advice to community members. Organizes health awareness sessions and emergency medical support.</div>
+                    </div>
+
+                    <div class="user-card" onclick="showProfile('user3')">
+                        <div class="offline-status"></div>
+                        <div class="user-photo">👨‍🏫</div>
+                        <div class="user-name">Amit Patel</div>
+                        <div class="user-info">Flat C-201 • Block C</div>
+                        <div class="user-details">Software Engineer • Tech enthusiast who helps with smart home setups and IT support. Runs coding classes for kids in the community.</div>
+                    </div>
+
+                    <div class="user-card" onclick="showProfile('user4')">
+                        <div class="online-status"></div>
+                        <div class="user-photo">👩‍🎨</div>
+                        <div class="user-name">Meera Singh</div>
+                        <div class="user-info">Flat D-702 • Block D</div>
+                        <div class="user-details">Artist & Designer • Organizes art workshops and cultural events. Helps with interior design consultations for community members.</div>
+                    </div>
+
+                    <div class="user-card" onclick="showProfile('user5')">
+                        <div class="online-status"></div>
+                        <div class="user-photo">👨‍🍳</div>
+                        <div class="user-name">Rohit Gupta</div>
+                        <div class="user-info">Flat A-156 • Block A</div>
+                        <div class="user-details">Professional Chef • Runs cooking classes on weekends. Available for catering community events and food-related consultations.</div>
+                    </div>
+
+                    <div class="user-card" onclick="showProfile('user6')">
+                        <div class="offline-status"></div>
+                        <div class="user-photo">👩‍💻</div>
+                        <div class="user-name">Sanya Joshi</div>
+                        <div class="user-info">Flat B-403 • Block B</div>
+                        <div class="user-details">Digital Marketing Expert • Helps local businesses with online presence. Manages community social media and newsletter.</div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- User Profile 1 -->
+        <div id="user1Profile" class="profile-page">
+            <button class="back-btn" onclick="showHome()">← Back to Community</button>
+            
+            <div class="profile-header">
+                <div class="profile-photo-large">👨‍💼</div>
+                <h1>Rajesh Kumar</h1>
+                <h2 style="color: #64b5f6; margin-bottom: 20px;">Society President</h2>
+                <div style="color: #4caf50; font-size: 1rem;">🟢 Online Now</div>
+            </div>
+
+            <div class="profile-details">
+                <h3>About Me</h3>
+                <p style="margin: 20px 0; line-height: 1.8;">
+                    I've been living in this community for over 8 years and have been serving as the Society President for the past 3 years. I'm passionate about creating a harmonious living environment for all residents and ensuring our community continues to thrive.
+                </p>
+
+                <p style="margin: 20px 0; line-height: 1.8;">
+                    I believe in transparent communication and collaborative decision-making. My door is always open for any concerns, suggestions, or ideas that can improve our community life.
+                </p>
+
+                <div class="info-section">
+                    <h3>Contact Information</h3>
+                    <div class="info-grid">
+                        <div class="info-item">
+                            <div class="info-label">Flat Number</div>
+                            <div class="info-value">A-304, Block A</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">Mobile</div>
+                            <div class="info-value">+91 98765 43210</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">Email</div>
+                            <div class="info-value">rajesh.president@gmail.com</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">Joined</div>
+                            <div class="info-value">March 2016</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="margin-top: 30px;">
+                    <h3>Services & Responsibilities</h3>
+                    <ul style="margin: 20px 0; line-height: 2;">
+                        <li>🏢 Society Administration & Management</li>
+                        <li>🤝 Resident Grievance Resolution</li>
+                        <li>📋 Monthly Society Meetings</li>
+                        <li>💰 Budget Planning & Financial Oversight</li>
+                        <li>🏗️ Maintenance & Infrastructure Projects</li>
+                        <li>🎉 Community Events Organization</li>
+                    </ul>
+                </div>
+
+                <div class="contact-actions">
+                    <a href="tel:+919876543210" class="contact-btn">📞 Call</a>
+                    <a href="mailto:rajesh.president@gmail.com" class="contact-btn">✉️ Email</a>
+                    <a href="#" class="contact-btn" onclick="alert('Chat feature coming soon!')">💬 Chat</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- User Profile 2 -->
+        <div id="user2Profile" class="profile-page">
+            <button class="back-btn" onclick="showHome()">← Back to Community</button>
+            
+            <div class="profile-header">
+                <div class="profile-photo-large">👩‍⚕️</div>
+                <h1>Dr. Priya Sharma</h1>
+                <h2 style="color: #64b5f6; margin-bottom: 20px;">Pediatrician</h2>
+                <div style="color: #4caf50; font-size: 1rem;">🟢 Online Now</div>
+            </div>
+
+            <div class="profile-details">
+                <h3>About Me</h3>
+                <p style="margin: 20px 0; line-height: 1.8;">
+                    I'm a pediatrician with over 12 years of experience in child healthcare. I'm passionate about ensuring the health and well-being of our community's children and families.
+                </p>
+
+                <p style="margin: 20px 0; line-height: 1.8;">
+                    I regularly conduct health awareness sessions and am available for emergency medical consultations for community members. I believe in preventive healthcare and community wellness.
+                </p>
+
+                <div class="info-section">
+                    <h3>Contact Information</h3>
+                    <div class="info-grid">
+                        <div class="info-item">
+                            <div class="info-label">Flat Number</div>
+                            <div class="info-value">B-508, Block B</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">Mobile</div>
+                            <div class="info-value">+91 87654 32109</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">Clinic</div>
+                            <div class="info-value">Child Care Clinic, Sector 12</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">Specialization</div>
+                            <div class="info-value">Pediatrics & Child Care</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="margin-top: 30px;">
+                    <h3>Community Services</h3>
+                    <ul style="margin: 20px 0; line-height: 2;">
+                        <li>👶 Pediatric Consultations</li>
+                        <li>🏥 Emergency Medical Support</li>
+                        <li>📚 Health Awareness Sessions</li>
+                        <li>💉 Vaccination Reminders</li>
+                        <li>🩺 Basic Health Check-ups</li>
+                        <li>👨‍👩‍👧‍👦 Family Health Guidance</li>
+                    </ul>
+                </div>
+
+                <div class="contact-actions">
+                    <a href="tel:+918765432109" class="contact-btn">📞 Call</a>
+                    <a href="#" class="contact-btn" onclick="alert('Booking appointment...')">🏥 Book Appointment</a>
+                    <a href="#" class="contact-btn" onclick="alert('Chat feature coming soon!')">💬 Chat</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Additional User Profiles (User 3-6) with similar structure -->
+        <div id="user3Profile" class="profile-page">
+            <button class="back-btn" onclick="showHome()">← Back to Community</button>
+            
+            <div class="profile-header">
+                <div class="profile-photo-large">👨‍🏫</div>
+                <h1>Amit Patel</h1>
+                <h2 style="color: #64b5f6; margin-bottom: 20px;">Software Engineer</h2>
+                <div style="color: #757575; font-size: 1rem;">⚪ Last seen 2 hours ago</div>
+            </div>
+
+            <div class="profile-details">
+                <h3>About Me</h3>
+                <p style="margin: 20px 0; line-height: 1.8;">
+                    I'm a software engineer with expertise in smart home technology and IT solutions. I love helping fellow residents with their tech needs and making our community more connected.
+                </p>
+
+                <div class="info-section">
+                    <h3>Contact Information</h3>
+                    <div class="info-grid">
+                        <div class="info-item">
+                            <div class="info-label">Flat Number</div>
+                            <div class="info-value">C-201, Block C</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">Mobile</div>
+                            <div class="info-value">+91 76543 21098</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">Expertise</div>
+                            <div class="info-value">Smart Home & IT Support</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">Company</div>
+                            <div class="info-value">TechnoSoft Solutions</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="margin-top: 30px;">
+                    <h3>Tech Services</h3>
+                    <ul style="margin: 20px 0; line-height: 2;">
+                        <li>💻 IT Support & Troubleshooting</li>
+                        <li>🏠 Smart Home Setup</li>
+                        <li>👨‍💻 Coding Classes for Kids</li>
+                        <li>📱 Mobile & App Support</li>
+                        <li>🔧 Network Configuration</li>
+                        <li>🎮 Gaming Setup Assistance</li>
+                    </ul>
+                </div>
+
+                <div class="contact-actions">
+                    <a href="tel:+917654321098" class="contact-btn">📞 Call</a>
+                    <a href="#" class="contact-btn" onclick="alert('Request tech support...')">🔧 Tech Support</a>
+                    <a href="#" class="contact-btn" onclick="alert('Chat feature coming soon!')">💬 Chat</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Continue with other user profiles... -->
+        <div id="user4Profile" class="profile-page">
+            <button class="back-btn" onclick="showHome()">← Back to Community</button>
+            
+            <div class="profile-header">
+                <div class="profile-photo-large">👩‍🎨</div>
+                <h1>Meera Singh</h1>
+                <h2 style="color: #64b5f6; margin-bottom: 20px;">Artist & Designer</h2>
+                <div style="color: #4caf50; font-size: 1rem;">🟢 Online Now</div>
+            </div>
+
+            <div class="profile-details">
+                <h3>About Me</h3>
+                <p style="margin: 20px 0; line-height: 1.8;">
+                    I'm a professional artist and interior designer who loves bringing creativity to our community. I organize art workshops and cultural events to bring residents together.
+                </p>
+
+                <div class="info-section">
+                    <h3>Contact Information</h3>
+                    <div class="info-grid">
+                        <div class="info-item">
+                            <div class="info-label">Flat Number</div>
+                            <div class="info-value">D-702, Block D</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">Mobile</div>
+                            <div class="info-value">+91 65432 10987</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">Studio</div>
+                            <div class="info-value">Art Studio, Sector 12</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Profile Container -->
+        <div class="profile-container">
+            <div class="profile-header">
+                <img src="default-avatar.png" alt="Profile Picture" class="profile-picture" id="profilePicture">
+                <div class="profile-info">
+                    <h1 class="profile-name" id="profileName">Loading...</h1>
+                    <p class="profile-role" id="profileRole">Member</p>
+                    <button class="edit-profile-btn" onclick="editProfile()">Edit Profile</button>
+                </div>
+            </div>
+
+            <div class="profile-details">
+                <div class="detail-card">
+                    <h3>Contact Information</h3>
+                    <p id="profileEmail">Email: </p>
+                    <p id="profileAddress">Address: </p>
+                </div>
+                <div class="detail-card">
+                    <h3>Profile QR Code</h3>
+                    <div id="qrcode" class="qr-code-container"></div>
+                </div>
+            </div>
+
+            <div class="admin-panel" id="adminPanel">
+                <h2>Admin Panel</h2>
+                <div class="user-list" id="userList">
+                    <!-- User list will be populated here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_URL = 'http://localhost:8000/api';
+        const REALTIME_API_URL = 'http://localhost:5000/api';
+        let currentUser = null;
+        let socket = null;
+
+        // Check login status on page load
+        window.onload = async function() {
+            const token = localStorage.getItem('token');
+            if (token) {
+                try {
+                    const response = await fetch(`${API_URL}/users/me/`, {
+                        headers: {
+                            'Authorization': `Bearer ${token}`
+                        }
+                    });
+                    if (response.ok) {
+                        currentUser = await response.json();
+                        updateUIForLoggedInUser();
+                        connectWebSocket();
+                    } else {
+                        // Token might be expired, try to refresh
+                        await refreshToken();
+                    }
+                } catch (error) {
+                    console.error('Error fetching user profile:', error);
+                    logout();
+                }
+            }
+        }
+
+        async function refreshToken() {
+            const refreshToken = localStorage.getItem('refreshToken');
+            if (!refreshToken) {
+                logout();
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_URL}/auth/refresh/`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ refresh: refreshToken })
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    localStorage.setItem('token', data.access);
+                    // Retry fetching user profile
+                    window.onload();
+                } else {
+                    logout();
+                }
+            } catch (error) {
+                console.error('Error refreshing token:', error);
+                logout();
+            }
+        }
+
+        function connectWebSocket() {
+            const token = localStorage.getItem('token');
+            socket = new WebSocket(`ws://localhost:5000/ws?token=${token}`);
+
+            socket.onopen = () => {
+                console.log('WebSocket connected');
+            };
+
+            socket.onmessage = (event) => {
+                const data = JSON.parse(event.data);
+                handleNotification(data);
+            };
+
+            socket.onclose = () => {
+                console.log('WebSocket disconnected');
+                // Try to reconnect after 5 seconds
+                setTimeout(connectWebSocket, 5000);
+            };
+        }
+
+        function handleNotification(data) {
+            // You can implement notification handling here
+            console.log('Received notification:', data);
+        }
+
+        async function showLoginModal() {
+            const email = prompt("Enter email:");
+            const password = prompt("Enter password:");
+            
+            if (email && password) {
+                try {
+                    const response = await fetch(`${API_URL}/auth/login/`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ email, password })
+                    });
+
+                    if (response.ok) {
+                        const data = await response.json();
+                        localStorage.setItem('token', data.access);
+                        localStorage.setItem('refreshToken', data.refresh);
+                        
+                        // Fetch user profile
+                        const profileResponse = await fetch(`${API_URL}/users/me/`, {
+                            headers: {
+                                'Authorization': `Bearer ${data.access}`
+                            }
+                        });
+                        
+                        if (profileResponse.ok) {
+                            currentUser = await profileResponse.json();
+                            updateUIForLoggedInUser();
+                            connectWebSocket();
+                        }
+                    } else {
+                        alert('Invalid credentials');
+                    }
+                } catch (error) {
+                    console.error('Login error:', error);
+                    alert('An error occurred during login');
+                }
+            }
+        }
+
+        async function showSignupModal() {
+            const name = prompt("Enter your name:");
+            const email = prompt("Enter email:");
+            const password = prompt("Enter password:");
+            const address = prompt("Enter your address:");
+            
+            if (name && email && password && address) {
+                try {
+                    const response = await fetch(`${API_URL}/auth/register/`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            name,
+                            email,
+                            password,
+                            address
+                        })
+                    });
+
+                    if (response.ok) {
+                        alert('Registration successful! Please login.');
+                        showLoginModal();
+                    } else {
+                        const data = await response.json();
+                        alert(data.detail || 'Registration failed');
+                    }
+                } catch (error) {
+                    console.error('Registration error:', error);
+                    alert('An error occurred during registration');
+                }
+            }
+        }
+
+        function updateUIForLoggedInUser() {
+            document.getElementById('loginBtn').style.display = 'none';
+            document.getElementById('signupBtn').style.display = 'none';
+            document.getElementById('logoutBtn').style.display = 'block';
+            document.getElementById('profile-link').style.display = 'block';
+
+            // Update profile information
+            document.getElementById('profileName').textContent = currentUser.name;
+            document.getElementById('profileEmail').textContent = 'Email: ' + currentUser.email;
+            document.getElementById('profileAddress').textContent = 'Address: ' + currentUser.address;
+
+            // Generate QR Code
+            document.getElementById('qrcode').innerHTML = '';
+            new QRCode(document.getElementById("qrcode"), {
+                text: JSON.stringify({
+                    userId: currentUser.id,
+                    name: currentUser.name,
+                    email: currentUser.email
+                }),
+                width: 128,
+                height: 128
+            });
+
+            // Show admin panel if user is admin
+            if (currentUser.is_admin) {
+                document.getElementById('admin-link').style.display = 'block';
+                document.getElementById('adminPanel').classList.add('visible');
+                loadAllUsers();
+            }
+        }
+
+        async function loadAllUsers() {
+            if (!currentUser?.is_admin) return;
+
+            try {
+                const response = await fetch(`${API_URL}/users/`, {
+                    headers: {
+                        'Authorization': `Bearer ${localStorage.getItem('token')}`
+                    }
+                });
+
+                if (response.ok) {
+                    const users = await response.json();
+                    const userList = document.getElementById('userList');
+                    userList.innerHTML = users.map(user => `
+                        <div class="detail-card">
+                            <h3>${user.name}</h3>
+                            <p>${user.email}</p>
+                            <button onclick="viewUserProfile('${user.id}')">View Profile</button>
+                        </div>
+                    `).join('');
+                }
+            } catch (error) {
+                console.error('Error loading users:', error);
+            }
+        }
+
+        async function editProfile() {
+            const newAddress = prompt("Enter new address:", currentUser.address);
+            if (newAddress) {
+                try {
+                    const response = await fetch(`${API_URL}/users/me/`, {
+                        method: 'PUT',
+                        headers: {
+                            'Authorization': `Bearer ${localStorage.getItem('token')}`,
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            address: newAddress
+                        })
+                    });
+
+                    if (response.ok) {
+                        currentUser = await response.json();
+                        document.getElementById('profileAddress').textContent = 'Address: ' + newAddress;
+                        
+                        // Regenerate QR code with new profile data
+                        document.getElementById('qrcode').innerHTML = '';
+                        new QRCode(document.getElementById("qrcode"), {
+                            text: JSON.stringify({
+                                userId: currentUser.id,
+                                name: currentUser.name,
+                                email: currentUser.email
+                            }),
+                            width: 128,
+                            height: 128
+                        });
+                    }
+                } catch (error) {
+                    console.error('Error updating profile:', error);
+                    alert('An error occurred while updating your profile');
+                }
+            }
+        }
+
+        async function viewUserProfile(userId) {
+            try {
+                const response = await fetch(`${API_URL}/users/${userId}/`, {
+                    headers: {
+                        'Authorization': `Bearer ${localStorage.getItem('token')}`
+                    }
+                });
+
+                if (response.ok) {
+                    const user = await response.json();
+                    alert(`User Profile:\nName: ${user.name}\nEmail: ${user.email}\nAddress: ${user.address}`);
+                }
+            } catch (error) {
+                console.error('Error viewing user profile:', error);
+                alert('An error occurred while viewing the user profile');
+            }
+        }
+
+        function logout() {
+            localStorage.removeItem('token');
+            localStorage.removeItem('refreshToken');
+            currentUser = null;
+            if (socket) {
+                socket.close();
+            }
+            location.reload();
+        }
+
+        // Add this new function for handling home navigation
+        function showHome() {
+            // Hide all profile pages
+            document.querySelectorAll('.profile-page').forEach(page => {
+                page.style.display = 'none';
+            });
+            
+            // Show the home page content
+            document.getElementById('homePage').style.display = 'block';
+        }
+
+        // Add event listener for home link
+        document.addEventListener('DOMContentLoaded', function() {
+            const homeLink = document.querySelector('a[href="index.html"]');
+            if (homeLink) {
+                homeLink.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    showHome();
+                });
+            }
+        });
+    </script>
+</body>
+</html>
